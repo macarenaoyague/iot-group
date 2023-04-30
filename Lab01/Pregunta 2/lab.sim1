@@ -1,0 +1,59 @@
+<circuit version="1.0.0-SR0" rev="1320" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<item itemtype="Subcircuit" CircId="Mega-1" mainComp="false" Show_id="true" Show_Val="false" Pos="616,256" rotation="90" hflip="1" vflip="1" label="Mega-1" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Logic_Symbol="false">
+<mainCompProps itemtype="MCU" CircId="1_mega2560-63" mainComp="true" Show_id="false" Show_Val="false" Pos="20,20" rotation="0" hflip="1" vflip="1" label="1_mega2560-63" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="lab1_2_senal.hex" Auto_Load="false" Rst_enabled="true" Ext_Osc="false" Wdt_enabled="false" />
+</item>
+
+<item itemtype="WaveGen" CircId="WaveGen-167" mainComp="false" ShowProp="Freq" Show_id="false" Show_Val="true" Pos="684,540" rotation="360" hflip="1" vflip="1" label="WaveGen-167" idLabPos="-64,-24" labelrot="0" valLabPos="-16,8" valLabRot="0" Out="true" Running="true" Wave_Type="Sine" Freq="10 Hz" Steps="100 _Pasos" Duty="50 _%" Always_On="false" Semi_Ampli="5 V" Mid_Volt="0 V" />
+
+<item itemtype="Battery" CircId="Battery-170" mainComp="false" Show_id="false" Show_Val="false" Pos="732,564" rotation="0" hflip="1" vflip="1" label="Battery-170" idLabPos="-18,-22" labelrot="0" valLabPos="-10,10" valLabRot="0" Voltage="2.5 V" Resistance="1e-14 Ω" />
+
+<item itemtype="Oscope" CircId="Oscope-178" mainComp="false" Show_id="false" Show_Val="false" Pos="972,460" rotation="0" hflip="1" vflip="1" label="Oscope-178" idLabPos="-90,-100" labelrot="0" valLabPos="-16,20" valLabRot="0" Basic_X="135 _Pixels" Basic_Y="135 _Pixels" BufferSize="600000 Samples" TimDiv="20000000000" TimPos="0,0,0,0," VolDiv="2.5,2.5,2.5,2.5," Tunnels=",,,," Trigger="0" Filter="0.1 V" Trigger="0" AutoSC="4" Tracks="1" HideCh="false,false,false,false," VolPos="0,0.0988806,0.0988806,0.0988806," />
+
+<item itemtype="Switch" CircId="Switch-199" mainComp="false" Show_id="false" Show_Val="false" Pos="740,520" rotation="0" hflip="1" vflip="1" label="Switch-199" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" DT="false" Poles="1 _Polos" />
+
+<item itemtype="Switch" CircId="Switch-200" mainComp="false" Show_id="false" Show_Val="false" Pos="780,564" rotation="0" hflip="1" vflip="1" label="Switch-200" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" DT="false" Poles="1 _Polos" />
+
+<item itemtype="Resistor" CircId="Resistor-221" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="912,580" rotation="720" hflip="1" vflip="1" label="Resistor-221" idLabPos="-16,-24" labelrot="0" valLabPos="-16,6" valLabRot="0" Resistance="1 kΩ" />
+
+<item itemtype="Push" CircId="Push-223" mainComp="false" Show_id="false" Show_Val="false" Pos="852,580" rotation="720" hflip="1" vflip="1" label="Push-223" idLabPos="-12,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1 _Polos" />
+
+<item itemtype="Ground" CircId="Ground-224" mainComp="false" Show_id="false" Show_Val="false" Pos="944,580" rotation="1350" hflip="1" vflip="1" label="Ground-224" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Node" CircId="Node-205" mainComp="false" Pos="816,520" />
+
+<item itemtype="Node" CircId="Node-208" mainComp="false" Pos="816,504" />
+
+<item itemtype="Node" CircId="Node-232" mainComp="false" Pos="880,580" />
+
+<item itemtype="Node" CircId="Node-279" mainComp="false" Pos="708,540" />
+
+<item itemtype="Connector" uid="connector-256" startpinid="Battery-170-rPin" endpinid="Switch-200-pinP0" pointList="748,564,764,564" />
+
+<item itemtype="Connector" uid="connector-257" startpinid="Switch-199-switch0pinN" endpinid="Node-205-0" pointList="756,520,816,520" />
+
+<item itemtype="Connector" uid="connector-258" startpinid="Mega-1-A0" endpinid="Node-208-0" pointList="688,488,688,504,816,504" />
+
+<item itemtype="Connector" uid="connector-260" startpinid="Oscope-178-Pin0" endpinid="Node-208-1" pointList="884,412,864,412,864,504,816,504" />
+
+<item itemtype="Connector" uid="connector-261" startpinid="Node-208-2" endpinid="Node-205-1" pointList="816,504,816,520" />
+
+<item itemtype="Connector" uid="connector-265" startpinid="Resistor-221-rPin" endpinid="Ground-224-Gnd" pointList="928,580,928,580" />
+
+<item itemtype="Connector" uid="connector-266" startpinid="Resistor-221-lPin" endpinid="Node-232-0" pointList="896,580,880,580" />
+
+<item itemtype="Connector" uid="connector-268" startpinid="Mega-1-52" endpinid="Node-232-1" pointList="832,472,832,556,880,556,880,580" />
+
+<item itemtype="Connector" uid="connector-269" startpinid="Node-232-2" endpinid="Push-223-switch0pinN" pointList="880,580,868,580" />
+
+<item itemtype="Connector" uid="connector-259" startpinid="Node-205-2" endpinid="Switch-200-switch0pinN" pointList="816,520,816,564,796,564" />
+
+<item itemtype="Connector" uid="Connector-277" startpinid="WaveGen-167-outnod" endpinid="Node-279-0" pointList="700,540,708,540" />
+
+<item itemtype="Connector" uid="Connector-278" startpinid="Switch-199-pinP0" endpinid="Node-279-1" pointList="724,520,708,520,708,540" />
+
+<item itemtype="Connector" uid="Connector-280" startpinid="Node-279-2" endpinid="Battery-170-lPin" pointList="708,540,708,564,716,564" />
+
+<item itemtype="Connector" uid="Connector-281" startpinid="Push-223-pinP0" endpinid="Mega-1-5V00" pointList="836,580,816,580,816,588,648,588,648,488" />
+
+</circuit>
