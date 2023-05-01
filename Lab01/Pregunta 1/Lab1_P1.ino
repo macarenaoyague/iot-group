@@ -260,6 +260,8 @@ void loop() {
 			if (hour >= 22 || hour <= 5) { // madrugada
 				state = NIGHT;
 				Serial.println("NIGHT");
+				curr = millis();
+				prev = curr;
 				elapsed = 0;
 			} 
 			else {
@@ -274,9 +276,10 @@ void loop() {
 					redTime = 17000;
 					redToGreenTime = 3000;
 				}
-
 				state = startState;
 				Serial.println("GREEN");
+				curr = millis();
+				prev = curr;
 				elapsed = 0;
 
 				//Coloca los segundos en vizualizador de siete segmentos
