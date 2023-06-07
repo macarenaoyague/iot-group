@@ -11,7 +11,7 @@ const char* ssid = "OnePlus 5T";
 const char* password = "jneirar12345678";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "10.100.249.216";
+const char* mqtt_server = "192.168.189.196";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -98,6 +98,9 @@ void loop() {
     Serial.println();
     String humidity = Serial2.readString();
 
+    char charBuf[humidity.length() + 1];
+    humidity.toCharArray(charBuf, humidity.length() + 1);
+
     if (!client.connected()) {
       reconnect();
     }
@@ -107,6 +110,6 @@ void loop() {
   
     if (now - lastMsg > 1000) {
       lastMsg = now;
-      client.publish("esp32/humidity", humidity);
+      client.publish("esp32/humidity", charBuf);
     }
 }
