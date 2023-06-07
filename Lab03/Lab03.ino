@@ -11,7 +11,7 @@ const char* ssid = "OnePlus 5T";
 const char* password = "jneirar12345678";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "127.0.0.1";
+const char* mqtt_server = "192.168.189.215";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
