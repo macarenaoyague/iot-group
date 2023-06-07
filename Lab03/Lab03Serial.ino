@@ -2,6 +2,9 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <Wire.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define RXp2 16
 #define TXp2 17
@@ -94,12 +97,20 @@ void setup() {
 }
 
 void loop() {
-    Serial.println("Message Received: ");
-    Serial.println();
-    String humidity = Serial2.readString();
+    // Recieve input from Arduino
+    String input = Serial2.readString();
 
-    char charBuf[humidity.length() + 1];
-    humidity.toCharArray(charBuf, humidity.length() + 1);
+    char inputBuf[input.length() + 1];
+    input.toCharArray(inputBuf, input.length() + 1);
+
+    Serial.println(input);
+    char * pt;
+    float humidity;
+    pt = strtok(inputBuf,",");
+    humidity = atof(pt);
+    float temperature;
+    pt = strtok(NULL,",");
+    temperature = atof(pt);
 
     if (!client.connected()) {
       reconnect();
@@ -110,6 +121,10 @@ void loop() {
   
     if (now - lastMsg > 1000) {
       lastMsg = now;
-      client.publish("esp32/humidity", charBuf);
+      char buf[64];
+      sprintf_s(buf, sizeof(buf), "%0.2f", humidity);
+      client.publish("esp32/humidity", buf);
+      sprintf_s(buf, sizeof(buf), "%0.2f", temperature);
+      client.publish("esp32/temperature", buf);
     }
 }
