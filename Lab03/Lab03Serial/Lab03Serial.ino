@@ -119,7 +119,7 @@ void loop() {
       humidity.toCharArray(charHumidity, humidityLen);
       int temperatureLen = temperature.length() + 1;
       char charTemperature[temperatureLen];
-      temperature.toCharArray(charHumidity, humidityLen);
+      temperature.toCharArray(charTemperature, temperatureLen);
       
       client.publish("esp32/humidity", charHumidity);
       client.publish("esp32/temperature", charTemperature);
