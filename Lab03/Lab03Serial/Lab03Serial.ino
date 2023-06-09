@@ -99,18 +99,11 @@ void setup() {
 void loop() {
     // Recieve input from Arduino
     String input = Serial2.readString();
-
-    char inputBuf[input.length() + 1];
-    input.toCharArray(inputBuf, input.length() + 1);
-
     Serial.println(input);
-    char * pt;
-    float humidity;
-    pt = strtok(inputBuf,",");
-    humidity = atof(pt);
-    float temperature;
-    pt = strtok(NULL,",");
-    temperature = atof(pt);
+
+    int icomma = input.indexOf(',');
+    String humidity = input.substring(0, icomma);
+    String temperature = input.substring(icomma + 1);
 
     if (!client.connected()) {
       reconnect();
@@ -121,10 +114,14 @@ void loop() {
   
     if (now - lastMsg > 1000) {
       lastMsg = now;
-      char buf[64];
-      sprintf_s(buf, sizeof(buf), "%0.2f", humidity);
-      client.publish("esp32/humidity", buf);
-      sprintf_s(buf, sizeof(buf), "%0.2f", temperature);
-      client.publish("esp32/temperature", buf);
+      int humidityLen = humidity.length() + 1; 
+      char charHumidity[humidityLen];
+      humidity.toCharArray(charHumidity, humidityLen);
+      int temperatureLen = temperature.length() + 1;
+      char charTemperature[temperatureLen];
+      temperature.toCharArray(charHumidity, humidityLen);
+      
+      client.publish("esp32/humidity", charHumidity);
+      client.publish("esp32/temperature", charTemperature);
     }
 }
