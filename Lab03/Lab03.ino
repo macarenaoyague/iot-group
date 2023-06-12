@@ -1,3 +1,7 @@
+/*
+  Código de prueba del ESP32 conectado a un sensor DHT11 y a un servidor MQTT. No se utiliza Arduino
+*/
+
 #include "DHT.h"
 #include <WiFi.h>
 #include <PubSubClient.h>
