@@ -28,8 +28,6 @@ void loop() {
   //Serial.print("Lectura de LDR: \t\t");
   //LDR_PERC = (analogRead(LDR))*0.097;
   //Serial.println(String(LDR_PERC)+"%");
-  delay(DELAY_LDR);
-
 
   long t; //timepo que demora en llegar el eco
   long d; //distancia en centimetros
@@ -42,11 +40,12 @@ void loop() {
   d = t/59;             //escalamos el tiempo a una distancia en cm
 
 
-  Serial.println(String(d));
+  Serial.println(String(d) + " cm");
+  delay(DELAY_LDR);
 
   // Seccion de envio de mensaje LoRa-----------------------------
   // Envia el mensaje a todos los dispositivos en el canal de 433 MHz
-  ResponseStatus rs = e32ttl100.sendMessage(String(d));
+  ResponseStatus rs = e32ttl100.sendMessage(String(d) + " cm");
   // Revisa si existe algun problema. En caso contrario imprime un
   // Success.
   Serial.print("Estado de envio: \t");
