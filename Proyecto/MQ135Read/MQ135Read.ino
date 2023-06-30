@@ -24,7 +24,7 @@ void setup() {
   //Remarks: Configure the pin of arduino as input.
   /************************************************************************************/ 
   MQ135.init(); 
-  MQ135.setR0(1);
+  MQ135.setRL(1);
   /* 
     //If the RL value is different from 10K please assign your RL value with the following method:
     MQ135.setRL(10);
