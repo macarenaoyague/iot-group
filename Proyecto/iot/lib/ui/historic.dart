@@ -1,6 +1,6 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_charts/flutter_charts.dart';
+import 'package:flutter_datetime_picker_bdaya/flutter_datetime_picker_bdaya.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:iot/data/classes.dart';
@@ -20,10 +20,10 @@ class HistoricPage extends StatefulWidget {
 }
 
 class _HistoricPageState extends State<HistoricPage> {
-  final dateFormat = DateFormat('dd-MM-yyyy');
+  final dateFormat = DateFormat('dd-MM-yyyy HH:mm:ss');
   bool gettingData = false;
-  List<DateTime?> _startDate = [DateTime.now()];
-  List<DateTime?> _endDate = [DateTime.now()];
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
   bool validData = true;
 
   List<Gas> _gases = [];
@@ -41,9 +41,7 @@ class _HistoricPageState extends State<HistoricPage> {
       gettingData = true;
     });
     String id = widget.prefs.getString('imeID') ?? '';
-    DateTime start = DateTime(_startDate[0]!.year, _startDate[0]!.month, _startDate[0]!.day);
-    DateTime end = DateTime(_endDate[0]!.year, _endDate[0]!.month, _endDate[0]!.day, 23, 59, 59);
-    _gases = await widget.mongoDB.getGases(id, start, end);
+    _gases = await widget.mongoDB.getGases(id, _startDate, _endDate);
     if (_gases.isEmpty) {
       validData = false;
       Gas dummyGas = Gas(
@@ -100,25 +98,23 @@ class _HistoricPageState extends State<HistoricPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              final startDate = await showCalendarDatePicker2Dialog(
-                                context: context,
-                                config: CalendarDatePicker2WithActionButtonsConfig(),
-                                dialogSize: const Size(325, 400),
-                                borderRadius: BorderRadius.circular(15),
-                                value: _startDate,
-                                dialogBackgroundColor: Colors.white,
+                              DatePickerBdaya.showDateTimePicker(
+                                context,
+                                showTitleActions: true,
+                                onConfirm: (date) {
+                                  setState(() {
+                                    _startDate = date;
+                                  });
+                                },
+                                currentTime: _startDate,
+                                locale: LocaleType.es,
                               );
-                              if (startDate != null) {
-                                setState(() {
-                                  _startDate = startDate;
-                                });
-                              }
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              width: 100,
+                              width: 50,
                               child: const Text(
-                                'Fecha inicial',
+                                'Desde',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -127,7 +123,7 @@ class _HistoricPageState extends State<HistoricPage> {
                             ),
                           ),
                           Text(
-                            dateFormat.format(_startDate[0]!),
+                            dateFormat.format(_startDate),
                             style: const TextStyle(fontSize: 20),
                           ),
                         ],
@@ -137,25 +133,23 @@ class _HistoricPageState extends State<HistoricPage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              final endDate = await showCalendarDatePicker2Dialog(
-                                context: context,
-                                config: CalendarDatePicker2WithActionButtonsConfig(),
-                                dialogSize: const Size(325, 400),
-                                borderRadius: BorderRadius.circular(15),
-                                value: _endDate,
-                                dialogBackgroundColor: Colors.white,
+                              DatePickerBdaya.showDateTimePicker(
+                                context,
+                                showTitleActions: true,
+                                onConfirm: (date) {
+                                  setState(() {
+                                    _endDate = date;
+                                  });
+                                },
+                                currentTime: _endDate,
+                                locale: LocaleType.es,
                               );
-                              if (endDate != null) {
-                                setState(() {
-                                  _endDate = endDate;
-                                });
-                              }
                             },
                             child: Container(
                               alignment: Alignment.center,
-                              width: 100,
+                              width: 50,
                               child: const Text(
-                                'Fecha final',
+                                'Hasta',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -164,7 +158,7 @@ class _HistoricPageState extends State<HistoricPage> {
                             ),
                           ),
                           Text(
-                            dateFormat.format(_endDate[0]!),
+                            dateFormat.format(_endDate),
                             style: const TextStyle(fontSize: 20),
                           ),
                         ],
@@ -172,7 +166,7 @@ class _HistoricPageState extends State<HistoricPage> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          if (_endDate[0]!.isBefore(_startDate[0]!)) {
+                          if (_endDate.isBefore(_startDate)) {
                             showAlert(context, "Error", "La fecha final es anterior a la fecha inicial");
                             return;
                           }
@@ -199,7 +193,7 @@ class _HistoricPageState extends State<HistoricPage> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              chartToRun(_gases, dateFormat),
+                              chartToRun(_gases),
                               const SizedBox(height: 10),
                               validData && _gases.isNotEmpty ? resume(_gases) : const Text("No hay datos para mostrar"),
                             ],
@@ -272,7 +266,8 @@ Widget resume(List<Gas> gases) {
   );
 }
 
-Widget chartToRun(List<Gas> gases, DateFormat dateFormat) {
+Widget chartToRun(List<Gas> gases) {
+  final dateFormat = DateFormat('dd/MM HH:mm:ss');
   LabelLayoutStrategy? xContainerLabelLayoutStrategy;
   ChartData chartData;
   ChartOptions chartOptions = const ChartOptions();
