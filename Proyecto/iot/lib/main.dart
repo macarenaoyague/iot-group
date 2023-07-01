@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:iot/ui/historic.dart';
 import 'package:iot/ui/home.dart';
 import 'package:iot/ui/resume.dart';
 import 'package:iot/ui/sharing.dart';
@@ -41,6 +42,7 @@ class _AppStateState extends State<AppState> {
         'home': (_) => HomePage(),
         'sharing': (_) => SharingPage(),
         'resume': (_) => ResumePage(),
+        'historic': (_) => HistoricPage(),
       },
       home: HomePage(),
     );

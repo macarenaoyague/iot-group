@@ -48,19 +48,27 @@ class _ExamplePopupState extends State<ExamplePopup> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Text(
-              'Número de muestras: ${widget.location.ngases}',
+              'Número de muestras asociadas: ${widget.location.ngases}',
               style: const TextStyle(fontSize: 12.0),
             ),
             Text(
-              'Concentración media del gas 1: ${widget.location.gas1mean}',
+              'Gas CO: ${widget.location.gasCOmean} ppm',
               style: const TextStyle(fontSize: 12.0),
             ),
             Text(
-              'Concentración media del gas 2: ${widget.location.gas2mean}',
+              'Gas CO2: ${widget.location.gasCO2mean} ppm',
               style: const TextStyle(fontSize: 12.0),
             ),
             Text(
-              'Concentración media del gas 3: ${widget.location.gas3mean}',
+              'Gas Alcohol: ${widget.location.gasAlcoholmean} ppm',
+              style: const TextStyle(fontSize: 12.0),
+            ),
+            Text(
+              'Gas LPG: ${widget.location.gasLPGmean} ppm',
+              style: const TextStyle(fontSize: 12.0),
+            ),
+            Text(
+              'Gas Propane: ${widget.location.gasPropanemean} ppm',
               style: const TextStyle(fontSize: 12.0),
             ),
           ],

@@ -45,7 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    widget.idController.text = "ime1";
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -218,6 +217,43 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (widget.idController.text.isEmpty) {
+                            showAlert(context, "Error", "Ingrese el ID del dispositivo");
+                            return;
+                          }
+                          final id = widget.idController.text;
+                          widget.mongoDB.checkID(id).then((exists) {
+                            if (!exists) {
+                              showAlert(context, "Error", "El ID no existe en la base de datos");
+                              return;
+                            }
+                            widget.prefs.setString('imeID', id).then(
+                                  (value) => Navigator.pushNamed(
+                                    context,
+                                    'historic',
+                                  ),
+                                );
+                          });
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(BlueTheme.primaryButton),
+                        ),
+                        child: const SizedBox(
+                          height: 75,
+                          child: Center(
+                            child: Text(
+                              'Histórico de datos',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -11,13 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharingPage extends StatefulWidget {
   SharingPage({Key? key}) : super(key: key);
   final SharedPreferences prefs = GetIt.instance.get<SharedPreferences>();
+  final MongoDB mongoDB = GetIt.instance.get<MongoDB>();
 
   @override
   _SharingPageState createState() => _SharingPageState();
 }
 
 class _SharingPageState extends State<SharingPage> {
-  MongoDB mongoDB = GetIt.instance.get<MongoDB>();
   int samples = 0;
 
   final Geolocator geolocator = Geolocator();
@@ -30,7 +30,6 @@ class _SharingPageState extends State<SharingPage> {
   @override
   void initState() {
     super.initState();
-    mongoDB.getCollectionNames(context);
   }
 
   @override
@@ -82,7 +81,7 @@ class _SharingPageState extends State<SharingPage> {
         speed = position.speed;
         samples++;
       });
-      await mongoDB.insertDocument(
+      await widget.mongoDB.insertDocument(
         context,
         'location',
         {

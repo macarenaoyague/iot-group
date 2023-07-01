@@ -6,9 +6,11 @@ class Location {
   final DateTime timestamp;
 
   int ngases = 0;
-  double gas1mean = 0;
-  double gas2mean = 0;
-  double gas3mean = 0;
+  double gasCOmean = 0;
+  double gasCO2mean = 0;
+  double gasAlcoholmean = 0;
+  double gasLPGmean = 0;
+  double gasPropanemean = 0;
 
   List<Gas> gases = [];
 
@@ -37,31 +39,39 @@ class Location {
   void calculate() {
     ngases = gases.length;
     if (ngases > 0) {
-      gas1mean = gases.map((e) => e.gas1).reduce((a, b) => a + b) / ngases;
-      gas2mean = gases.map((e) => e.gas2).reduce((a, b) => a + b) / ngases;
-      gas3mean = gases.map((e) => e.gas3).reduce((a, b) => a + b) / ngases;
+      gasCOmean = gases.map((e) => e.co).reduce((a, b) => a + b) / ngases;
+      gasCO2mean = gases.map((e) => e.co2).reduce((a, b) => a + b) / ngases;
+      gasAlcoholmean = gases.map((e) => e.alcohol).reduce((a, b) => a + b) / ngases;
+      gasLPGmean = gases.map((e) => e.lpg).reduce((a, b) => a + b) / ngases;
+      gasPropanemean = gases.map((e) => e.propane).reduce((a, b) => a + b) / ngases;
     }
   }
 }
 
 class Gas {
-  final double gas1;
-  final double gas2;
-  final double gas3;
+  final double co;
+  final double co2;
+  final double alcohol;
+  final double lpg;
+  final double propane;
   final DateTime timestamp;
 
   Gas({
-    required this.gas1,
-    required this.gas2,
-    required this.gas3,
+    required this.co,
+    required this.co2,
+    required this.alcohol,
+    required this.lpg,
+    required this.propane,
     required this.timestamp,
   });
 
   factory Gas.fromMap(Map<String, dynamic> map) {
     return Gas(
-      gas1: map['gas1'],
-      gas2: map['gas2'],
-      gas3: map['gas3'],
+      co: map['gases']['co'],
+      co2: map['gases']['co2'],
+      alcohol: map['gases']['alcohol'],
+      lpg: map['gases']['lpg'],
+      propane: map['gases']['propane'],
       timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'].toInt()),
     );
   }
