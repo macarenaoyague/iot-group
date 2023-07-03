@@ -109,6 +109,7 @@ class _SharingPageState extends State<SharingPage> {
         await sendData();
         locations.clear();
       }
+      await Future.delayed(const Duration(seconds: 3));
     }
   }
 

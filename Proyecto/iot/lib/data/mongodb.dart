@@ -101,29 +101,6 @@ class MongoDB {
       for (var gasItem in gasesItems) {
         location.addGas(Gas.fromMap(gasItem));
       }
-      // DUMMY
-      /*List<double> valuesDummy = [1, 2, 3, 4, 5];
-      Gas gasDummy = Gas(
-        co: valuesDummy[Random().nextInt(3)],
-        co2: valuesDummy[Random().nextInt(3)],
-        alcohol: valuesDummy[Random().nextInt(3)],
-        lpg: valuesDummy[Random().nextInt(3)],
-        propane: valuesDummy[Random().nextInt(3)],
-        createdAt: location.createdAt,
-      );
-      location.addGas(gasDummy);
-      if (Random().nextBool()) {
-        Gas gasDummy = Gas(
-          co: valuesDummy[Random().nextInt(3)],
-          co2: valuesDummy[Random().nextInt(3)],
-          alcohol: valuesDummy[Random().nextInt(3)],
-          lpg: valuesDummy[Random().nextInt(3)],
-          propane: valuesDummy[Random().nextInt(3)],
-          createdAt: location.createdAt,
-        );
-        location.addGas(gasDummy);
-      }
-      location.calculate();*/
       locationList.add(location);
     }
 
