@@ -50,7 +50,7 @@ class _HistoricPageState extends State<HistoricPage> {
         alcohol: 0,
         lpg: 0,
         propane: 0,
-        timestamp: DateTime.now(),
+        createdAt: DateTime.now().toUtc(),
       );
       _gases.add(dummyGas);
     } else {
@@ -308,7 +308,7 @@ Widget chartToRun(List<Gas> gases) {
   // axisX
   List<String> labels = [];
   for (var gas in gases) {
-    labels.add(dateFormat.format(gas.timestamp));
+    labels.add(dateFormat.format(gas.createdAt));
   }
   // series
   List<String> series = ["ppm CO", "ppm CO2", "ppm Alcohol", "ppm LPG", "ppm Propane"];

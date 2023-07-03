@@ -21,6 +21,7 @@ class _SharingPageState extends State<SharingPage> {
   int samples = 0;
 
   final Geolocator geolocator = Geolocator();
+  List<Map<String, dynamic>> locations = [];
 
   double latitude = 0.0;
   double longitude = 0.0;
@@ -49,15 +50,27 @@ class _SharingPageState extends State<SharingPage> {
     }
   }
 
-  void stopLocationUpdates() {
+  Future<void> stopLocationUpdates() async {
     sending = false;
     if (mounted) {
+      if (locations.isNotEmpty) {
+        await sendData();
+        locations.clear();
+      }
       setState(() {
         latitude = 0.0;
         longitude = 0.0;
         speed = 0.0;
       });
     }
+  }
+
+  Future<void> sendData() async {
+    await widget.mongoDB.insertDocuments(
+      context,
+      'location',
+      locations,
+    );
   }
 
   Future<void> updateLocation() async {
@@ -81,17 +94,21 @@ class _SharingPageState extends State<SharingPage> {
         speed = position.speed;
         samples++;
       });
-      await widget.mongoDB.insertDocument(
-        context,
-        'location',
+
+      locations.add(
         {
           'latitude': latitude,
           'longitude': longitude,
           'speed': speed,
           'id': widget.prefs.getString('imeID'),
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'createdAt': DateTime.now().toUtc(),
         },
       );
+
+      if (locations.length == 4) {
+        await sendData();
+        locations.clear();
+      }
     }
   }
 

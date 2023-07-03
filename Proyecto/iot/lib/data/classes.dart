@@ -3,7 +3,7 @@ class Location {
   final double latitude;
   final double longitude;
   final double speed;
-  final DateTime timestamp;
+  final DateTime createdAt;
 
   int ngases = 0;
   double gasCOmean = 0;
@@ -19,7 +19,7 @@ class Location {
     required this.latitude,
     required this.longitude,
     required this.speed,
-    required this.timestamp,
+    required this.createdAt,
   });
 
   factory Location.fromMap(Map<String, dynamic> map, int idx) {
@@ -28,7 +28,7 @@ class Location {
       latitude: map['latitude'],
       longitude: map['longitude'],
       speed: map['speed'],
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'].toInt()),
+      createdAt: map['createdAt'],
     );
   }
 
@@ -54,7 +54,7 @@ class Gas {
   final double alcohol;
   final double lpg;
   final double propane;
-  final DateTime timestamp;
+  final DateTime createdAt;
 
   Gas({
     required this.co,
@@ -62,7 +62,7 @@ class Gas {
     required this.alcohol,
     required this.lpg,
     required this.propane,
-    required this.timestamp,
+    required this.createdAt,
   });
 
   factory Gas.fromMap(Map<String, dynamic> map) {
@@ -72,7 +72,7 @@ class Gas {
       alcohol: map['gases']['alcohol'],
       lpg: map['gases']['lpg'],
       propane: map['gases']['propane'],
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp'].toInt()),
+      createdAt: map['createdAt'],
     );
   }
 }

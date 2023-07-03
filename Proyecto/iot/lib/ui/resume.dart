@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_charts/flutter_charts.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -30,6 +32,7 @@ class _ResumePageState extends State<ResumePage> {
   bool gettingData = true;
   ResumeArguments? args;
   int n = 0;
+  bool changeSamples = false;
   final dateFormat = DateFormat('dd-MM-yyyy');
 
   final PopupController _popupLayerController = PopupController();
@@ -40,6 +43,7 @@ class _ResumePageState extends State<ResumePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       args = ModalRoute.of(context)!.settings.arguments as ResumeArguments?;
       n = args!.samples;
+      changeSamples = args!.changeSamples;
       fetchData();
     });
   }
@@ -50,6 +54,8 @@ class _ResumePageState extends State<ResumePage> {
     });
     String id = widget.prefs.getString('imeID') ?? '';
     _locations = await widget.mongoDB.getLastNLocations(id, n);
+    print("Locaciones recibidas: ${_locations.length}");
+    inspect(_locations);
     bool first = true;
     for (var location in _locations) {
       if (first) {
@@ -248,7 +254,7 @@ class _ResumePageState extends State<ResumePage> {
                       child: const Text('Mostrar resumen'),
                     ),
                   ),
-                if (_locations.isNotEmpty)
+                if (_locations.isNotEmpty && changeSamples)
                   Positioned(
                     bottom: 16,
                     left: 16,
@@ -336,7 +342,7 @@ class _ResumePageState extends State<ResumePage> {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              Text('Desde ${dateFormat.format(_locations.first.timestamp)} hasta ${dateFormat.format(_locations.last.timestamp)}'),
+                              Text('Desde ${dateFormat.format(_locations.first.createdAt)} hasta ${dateFormat.format(_locations.last.createdAt)}'),
                               const SizedBox(height: 20),
                               Text('Cantidad de posiciones: ${_locations.length}'),
                               const SizedBox(height: 40),

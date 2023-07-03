@@ -1,8 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:math';
-
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:iot/constant.dart';
 import 'package:iot/data/classes.dart';
@@ -20,14 +17,10 @@ class MongoDB {
       var collectionNames = await db!.getCollectionNames();
       print(jsonEncode(collectionNames));
 
-      var collection = db!.collection("gases");
+      var collection = db!.collection("location");
       inspect(collection);
       var data = await collection.find().toList();
-      var convertedData = data.map((doc) {
-        var updatedTimestamp = doc['timestamp'].toInt();
-        return {...doc, 'timestamp': updatedTimestamp};
-      }).toList();
-      print(jsonEncode(convertedData));
+      inspect(data);
 
       //await deleteCollection(context, "location");
       //await createCollection(context, "location");
@@ -74,11 +67,13 @@ class MongoDB {
     }
   }
 
-  Future<void> insertDocument(BuildContext context, String collectionName, Map<String, dynamic> document) async {
+  Future<void> insertDocuments(BuildContext context, String collectionName, List<Map<String, dynamic>> documents) async {
+    print("Insert documents");
     if (db != null) {
-      await db!.collection(collectionName).insert(document);
+      print("Sending ${documents.length} documents to $collectionName}");
+      await db!.collection(collectionName).insertMany(documents);
     } else {
-      showAlert(context, "Error", "No se pudo insertar el documento $document en la colección $collectionName\n\nError: db is null");
+      showAlert(context, "Error", "No se pudo insertar los documentos $documents en la colección $collectionName\n\nError: db is null");
     }
   }
 
@@ -90,29 +85,31 @@ class MongoDB {
     var locationCollection = db!.collection("location");
     var gasesCollection = db!.collection("gases");
     var locationItems = await locationCollection
-        .find(where.eq("id", id).sortBy("timestamp", descending: true).limit(n))
+        .find(where.eq("id", id).sortBy("createdAt", descending: true).limit(n))
         .toList()
         .then((list) => list.reversed.toList());
+    inspect(locationItems);
     List<Location> locationList = [];
     int idx = 1;
     for (var locationItem in locationItems) {
       Location location = Location.fromMap(locationItem, idx++);
-      var locationTime = location.timestamp;
-      Int64 from = Int64(locationTime.subtract(const Duration(seconds: 3)).millisecondsSinceEpoch);
-      Int64 to = Int64(locationTime.add(const Duration(seconds: 3)).millisecondsSinceEpoch);
-      var gasesItems = await gasesCollection.find(where.eq("id", id).and(where.gte("timestamp", from).and(where.lte("timestamp", to)))).toList();
+      //location.createdAt -> DateTime
+      var locationTime = location.createdAt;
+      var from = locationTime.subtract(const Duration(seconds: 3));
+      var to = locationTime.add(const Duration(seconds: 3));
+      var gasesItems = await gasesCollection.find(where.eq("id", id).and(where.gte("createdAt", from).and(where.lte("createdAt", to)))).toList();
       for (var gasItem in gasesItems) {
         location.addGas(Gas.fromMap(gasItem));
       }
       // DUMMY
-      List<double> valuesDummy = [1, 2, 3, 4, 5];
+      /*List<double> valuesDummy = [1, 2, 3, 4, 5];
       Gas gasDummy = Gas(
         co: valuesDummy[Random().nextInt(3)],
         co2: valuesDummy[Random().nextInt(3)],
         alcohol: valuesDummy[Random().nextInt(3)],
         lpg: valuesDummy[Random().nextInt(3)],
         propane: valuesDummy[Random().nextInt(3)],
-        timestamp: location.timestamp,
+        createdAt: location.createdAt,
       );
       location.addGas(gasDummy);
       if (Random().nextBool()) {
@@ -122,11 +119,11 @@ class MongoDB {
           alcohol: valuesDummy[Random().nextInt(3)],
           lpg: valuesDummy[Random().nextInt(3)],
           propane: valuesDummy[Random().nextInt(3)],
-          timestamp: location.timestamp,
+          createdAt: location.createdAt,
         );
         location.addGas(gasDummy);
       }
-      location.calculate();
+      location.calculate();*/
       locationList.add(location);
     }
 
@@ -135,10 +132,8 @@ class MongoDB {
 
   Future<List<Gas>> getGases(String id, DateTime from, DateTime to) async {
     var gasesCollection = db!.collection("gases");
-    Int64 fromInt64 = Int64(from.millisecondsSinceEpoch);
-    Int64 toInt64 = Int64(to.millisecondsSinceEpoch);
-    var gasesItems =
-        await gasesCollection.find(where.eq("id", id).and(where.gte("timestamp", fromInt64).and(where.lte("timestamp", toInt64)))).toList();
+    var gasesItems = await gasesCollection.find(where.eq("id", id).and(where.gte("createdAt", from).and(where.lte("createdAt", to)))).toList();
+    inspect(gasesItems);
     List<Gas> gasesList = [];
     for (var gasItem in gasesItems) {
       gasesList.add(Gas.fromMap(gasItem));
