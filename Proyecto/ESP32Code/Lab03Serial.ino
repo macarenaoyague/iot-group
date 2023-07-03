@@ -120,6 +120,59 @@ void loop() {
     String input = Serial2.readString();
     Serial.println(input);
 
+    /*
+    // Separamos los datos recibidos por espacios
+    int isep = input.indexOf(' ');
+    String id = input.substring(0, isep);
+    String tempStr = input.substring(isep+1);
+    isep = tempStr.indexOf(' ');
+    String coStr = tempStr.substring(0, isep);
+    tempStr = tempStr.substring(isep+1);
+    isep = tempStr.indexOf(' ');
+    String co2Str = tempStr.substring(0, isep);
+    tempStr = tempStr.substring(isep+1);
+    isep = tempStr.indexOf(' ');
+    String alcoholStr = tempStr.substring(0, isep);
+    tempStr = tempStr.substring(isep+1);
+    isep = tempStr.indexOf(' ');
+    String lpgStr = tempStr.substring(0, isep);
+    String propaneStr = tempStr.substring(isep+1);
+
+    // Convertimos los datos de cadena de caracteres a números flotantes
+    float co = coStr.toFloat();
+    float co2 = co2Str.toFloat();
+    float alcohol = alcoholStr.toFloat();
+    float lpg = lpgStr.toFloat();
+    float propane = propaneStr.toFloat();
+
+    // Imprmimos los datos recibidos
+    Serial.print("ID: ");
+    Serial.print(id);
+    Serial.print("\tCO: ");
+    Serial.print(co);
+    Serial.print("\tCO2: ");
+    Serial.print(co2);
+    Serial.print("\tAlcohol: ");
+    Serial.print(alcohol);
+    Serial.print("\tLPG: ");
+    Serial.print(lpg);
+    Serial.print("\tPropane: ");
+    Serial.println(propane);
+
+    // Generamos el mensaje en Json con los datos recibidos
+    StaticJsonDocument<256> doc;
+    doc["id"] = id;
+    doc["gases"]["co"] = co;
+    doc["gases"]["co2"] = co2;
+    doc["gases"]["alcohol"] = alcohol;
+    doc["gases"]["lpg"] = lpg;
+    doc["gases"]["propane"] = propane;
+
+    // Convertimos el mensaje en Json a una cadena de caracteres
+    char output[128];
+    serializeJson(doc, output);
+    */
+
     // Si no se ha logrado la conexión con el servidor MQTT, se intenta reconectar
     if (!client.connected()) {
       reconnect();
@@ -135,5 +188,6 @@ void loop() {
       
       // Publicamos la humedad y la temperatura en los tópicos esp32/humidity y esp32/temperature
       client.publish("esp32/data", input);
+      //client.publish("esp32/data", output);
     }
 }
